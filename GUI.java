@@ -97,7 +97,7 @@ public class GUI implements Serializable {
 					e.printStackTrace();
 				} catch (IOException e) {
 					e.printStackTrace();
-				} // need to add the function
+				} 
 			}
 		});
 		menu[1].add(menuItem);
