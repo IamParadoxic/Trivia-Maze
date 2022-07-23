@@ -1,7 +1,9 @@
-package GUI;
+package Contraller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import View.TriviaMazeMain;
 
 public class ActionHandler implements ActionListener{
 	

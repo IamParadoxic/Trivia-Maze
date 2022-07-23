@@ -1,7 +1,9 @@
-package GUI;
+package View;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,23 +21,26 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 public class GUI implements Serializable{
 	
 	private static final long serialVersionUID = -471174395510626265L;
-
 	TriviaMazeMain tmm;
-
 	JFrame window;
-	public JTextArea messageText1;
-	public JTextArea messageText2;
+	public JTextArea messageText;
 	public JPanel fieldPanel[] = new JPanel[10];
 	public JLabel fieldLabel[] = new JLabel[10];
 	public JMenuBar menuBar;
 	public JMenu menu[] = new JMenu[10];
 	public JMenuItem menuItem;
-	public JButton doorTop, doorBottom, doorLeft, doorRight, chestB;
+	public JButton doorTop, doorBottom, doorLeft, doorRight, chestB, enterB;
 	public JLabel chestL;
+	public static JLabel textLabel;
+	public Container con;
+	public JPanel textPanel, inputPanel;
+	public Font normalFont = new Font("Times New Roman", Font.PLAIN, 26);
+	public static JTextField jtf;
 
 	public GUI(TriviaMazeMain tmm) {
 
@@ -43,9 +48,9 @@ public class GUI implements Serializable{
 
 		createFrame();
 		createMeunBar();
-		creatBottomBox();
-		creatRightBox();
+		creatQuestionBox();
 		createMainField();
+		creatInoutBox();
 		createChest(true);
 		createDoors();
 
@@ -60,6 +65,7 @@ public class GUI implements Serializable{
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.getContentPane().setBackground(Color.black);
 		window.setLayout(null);
+		con = window.getContentPane();
 	}
 
 	public void createMeunBar() {
@@ -130,45 +136,31 @@ public class GUI implements Serializable{
 		window.setJMenuBar(menuBar);
 	}
 
-	public void creatRightBox() {
+	public void creatQuestionBox() {
 		
-		messageText1 = new JTextArea("Questions and descriptions");
-		messageText1.setBounds(600, 0, 500, 600);
-		messageText1.setBackground(Color.blue);
-		messageText1.setForeground(Color.white);
-		messageText1.setEditable(false);
-		messageText1.setLineWrap(true);
-		messageText1.setWrapStyleWord(true);
-		messageText1.setFont((new Font("Test", Font.BOLD, 30)));
-		window.add(messageText1);
-		
-	}
-
-	public void creatBottomBox() {
-
-		messageText2 = new JTextArea("Answers");
-		messageText2.setBounds(0, 600, 1100, 300);
-		messageText2.setBackground(Color.red);
-		messageText2.setForeground(Color.white);
-		messageText2.setEditable(false);
-		messageText2.setLineWrap(true);
-		messageText2.setWrapStyleWord(true);
-		messageText2.setFont((new Font("Test", Font.BOLD, 30)));
-		window.add(messageText2);
+		messageText = new JTextArea("Questions and descriptions");
+		messageText.setBounds(600, 0, 500, 1100);
+		messageText.setBackground(Color.red);
+		messageText.setForeground(Color.white);
+		messageText.setEditable(false);
+		messageText.setLineWrap(true);
+		messageText.setWrapStyleWord(true);
+		messageText.setFont((new Font("Test", Font.BOLD, 30)));
+		window.add(messageText);
 		
 	}
 	
 	public void reset() {
-		messageText1.setVisible(false);
-		messageText1 = new JTextArea("test");
-		messageText1.setBounds(1200, 0, 400, 1200);
-		messageText1.setBackground(Color.red);
-		messageText1.setForeground(Color.white);
-		messageText1.setEditable(false);
-		messageText1.setLineWrap(true);
-		messageText1.setWrapStyleWord(true);
-		messageText1.setFont((new Font("Test", Font.BOLD, 30)));
-		window.add(messageText1);
+		messageText.setVisible(false);
+		messageText = new JTextArea("test");
+		messageText.setBounds(1200, 0, 400, 1200);
+		messageText.setBackground(Color.red);
+		messageText.setForeground(Color.white);
+		messageText.setEditable(false);
+		messageText.setLineWrap(true);
+		messageText.setWrapStyleWord(true);
+		messageText.setFont((new Font("Test", Font.BOLD, 30)));
+		window.add(messageText);
 
 	}
 
@@ -288,4 +280,37 @@ public class GUI implements Serializable{
 
 		chestB.setVisible(true);
 	}
+	
+	public void creatInoutBox() {
+		
+		textPanel = new JPanel();
+		textPanel.setBounds(50, 620, 500, 100);
+		textPanel.setBackground(Color.black);
+		
+		textLabel = new JLabel("Enter your answer here");
+		textLabel.setForeground(Color.white);
+		textLabel.setFont(normalFont);
+		
+		textPanel.add(textLabel);
+		con.add(textPanel);
+		
+		inputPanel = new JPanel();
+		inputPanel.setBounds(50, 720, 500, 50);
+		inputPanel.setBackground(Color.black);
+		inputPanel.setLayout(new GridLayout(1,2));
+		
+		jtf = new JTextField();
+		inputPanel.add(jtf);
+		
+		enterB = new JButton("ENTER");
+		enterB.setForeground(Color.black);
+		enterB.addActionListener(tmm.iHandler);
+		enterB.setActionCommand("enter answer");
+		
+		inputPanel.add(enterB);
+		con.add(inputPanel);
+		
+	}
+	
+	
 }

@@ -1,4 +1,4 @@
-package GUI;
+package View;
 
 public class Event {
 
