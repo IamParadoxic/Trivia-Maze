@@ -1,0 +1,64 @@
+package maze;
+
+import java.io.Serializable;
+
+import GUI.GUI;
+
+public class Room implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3787514693100801453L;
+
+	private static final int NORTH = 0, EAST = 1, SOUTH = 2, WEST = 3;
+
+	private Door[] myDoors = new Door[4];
+
+	private final Room NORTH_ROOM;
+	private final Room WEST_ROOM;
+
+	private int myX;
+
+	private int myY;
+
+	private int myWidth;
+
+	private int myHeight;
+
+	private GUI gui;
+
+
+	public Room(final int theX, final int theY, final int theWidth, final int theHeight, final Room theNorthRoom, final Room theWestRoom,
+			final Door theSouthDoor, final Door theEastDoor){
+		//sets values based on the parameters given
+		NORTH_ROOM = theNorthRoom;
+		WEST_ROOM = theWestRoom;
+		myX = theX;
+		myY = theY;
+		myWidth = theWidth;
+		myHeight = theHeight;
+		myDoors[SOUTH] = theSouthDoor;
+		myDoors[EAST] = theEastDoor;
+
+		//dynamically sets the north and west door based on if the room to the north/west of it exists, and if it does, and if there is a door in that room that connects to this room, sets the door that would connect back to be the same door object from that room
+		if(NORTH_ROOM != null) {
+			if(NORTH_ROOM.myDoors[SOUTH] != null) {
+				myDoors[NORTH] = NORTH_ROOM.myDoors[SOUTH];
+			} else { myDoors[NORTH] = null;}
+		} else { myDoors[NORTH] = null;}
+
+		if(WEST_ROOM != null) {
+			if(WEST_ROOM.myDoors[EAST] != null) {
+				myDoors[WEST] = WEST_ROOM.myDoors[EAST];
+			} else { myDoors[WEST] = null;}
+		} else { myDoors[WEST] = null;}
+	}
+
+	public Door getDoor(final int theDirection) {
+		return myDoors[theDirection];
+	}
+	
+	
+	
+}
