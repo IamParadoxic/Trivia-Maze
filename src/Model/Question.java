@@ -1,4 +1,4 @@
-package maze;
+package Model;
 
 import java.io.Serializable;
 

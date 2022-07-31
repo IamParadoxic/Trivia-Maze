@@ -3,7 +3,7 @@ package Controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import maze.TriviaMazeMain;
+import Model.TriviaMazeMain;
 
 public class ActionHandler implements ActionListener{
 	

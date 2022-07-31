@@ -1,8 +1,8 @@
-package maze;
+package Model;
 
 import Controller.*;
-import GUI.Event;
-import GUI.GUI;
+import View.Event;
+import View.GUI;
 
 public class TriviaMazeMain {
 	

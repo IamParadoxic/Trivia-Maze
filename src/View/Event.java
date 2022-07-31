@@ -1,6 +1,6 @@
-package GUI;
+package View;
 
-import maze.TriviaMazeMain;
+import Model.TriviaMazeMain;
 
 public class Event {
 

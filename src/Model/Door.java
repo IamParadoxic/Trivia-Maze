@@ -1,11 +1,11 @@
-package maze;
+package Model;
 
 import java.io.*;
 
 import javax.swing.ImageIcon;
 import javax.swing.JTextArea;
 
-import GUI.GUI;
+import View.GUI;
 
 public class Door implements Serializable{
 

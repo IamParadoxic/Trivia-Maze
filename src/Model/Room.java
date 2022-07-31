@@ -1,8 +1,8 @@
-package maze;
+package Model;
 
 import java.io.Serializable;
 
-import GUI.GUI;
+import View.GUI;
 
 public class Room implements Serializable{
 
@@ -17,6 +17,8 @@ public class Room implements Serializable{
 
 	private final Room NORTH_ROOM;
 	private final Room WEST_ROOM;
+	//private final Room EAST_ROOM;
+	//private final Room SOUTH_ROOM;
 
 	private int myX;
 
