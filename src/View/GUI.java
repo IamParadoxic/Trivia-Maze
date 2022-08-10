@@ -4,14 +4,22 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Set;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -19,14 +27,17 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import Model.TriviaMazeMain;
+import Model.*;
+import Model.Room.Direction;
+import Model.Door.AccessLevel;
 
 public class GUI implements Serializable{
-	
+
 	private static final long serialVersionUID = -471174395510626265L;
 	TriviaMazeMain tmm;
 	JFrame window;
@@ -43,6 +54,9 @@ public class GUI implements Serializable{
 	public JPanel textPanel, inputPanel;
 	public Font normalFont = new Font("Times New Roman", Font.PLAIN, 26);
 	public static JTextField jtf;
+	private Room myGrid[][];
+	private Point myGridLocation = new Point(0,0);
+	private Question myQuestion;
 
 	public GUI(TriviaMazeMain tmm) {
 
@@ -50,9 +64,9 @@ public class GUI implements Serializable{
 
 		createFrame();
 		createMeunBar();
-		creatQuestionBox();
+		creatQuestionBox(messageText);
 		createMainField();
-		creatInoutBox();
+		creatInoutBox(enterB);
 		createChest(true);
 		createDoors();
 
@@ -74,9 +88,6 @@ public class GUI implements Serializable{
 
 		menuBar = new JMenuBar();
 		menu[1] = new JMenu("File");
-		// menu.setMnemonic(KeyEvent.VK_A);
-		// menu.getAccessibleContext().setAccessibleDescription(
-		// "The only menu in this program that has menu items");
 		menuBar.add(menu[1]);
 
 		// reset the maze, the rooms, the doors, the questions
@@ -131,15 +142,34 @@ public class GUI implements Serializable{
 
 		menu[2] = new JMenu("Help");
 		menuBar.add(menu[2]);
+
 		menuItem = new JMenuItem("About");
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent theEvent) {
+				JOptionPane.showMessageDialog(null, "Version 1.0", "About", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
 		menu[2].add(menuItem);
+
 		menuItem = new JMenuItem("Game Play Instructions");
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent theEvent) {
+				JOptionPane.showMessageDialog(null, "Use keyboard and mouse to play." 
+						+ "\nAnswer the quetions to open the doors."
+						+ "\nGo from left-top conner to right-bottom conner to win!" 
+						, "Game Play Instructions", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
 		menu[2].add(menuItem);
+
 		window.setJMenuBar(menuBar);
+
 	}
 
-	public void creatQuestionBox() {
-		
+	public void creatQuestionBox(JTextArea theMessageText) {
+
 		messageText = new JTextArea("Questions and descriptions");
 		messageText.setBounds(600, 0, 500, 1100);
 		messageText.setBackground(Color.red);
@@ -149,21 +179,13 @@ public class GUI implements Serializable{
 		messageText.setWrapStyleWord(true);
 		messageText.setFont((new Font("Test", Font.BOLD, 30)));
 		window.add(messageText);
-		
-	}
-	
-	public void reset() {
-		messageText.setVisible(false);
-		messageText = new JTextArea("test");
-		messageText.setBounds(1200, 0, 400, 1200);
-		messageText.setBackground(Color.red);
-		messageText.setForeground(Color.white);
-		messageText.setEditable(false);
-		messageText.setLineWrap(true);
-		messageText.setWrapStyleWord(true);
-		messageText.setFont((new Font("Test", Font.BOLD, 30)));
-		window.add(messageText);
 
+	}
+
+	public void reset() {
+
+		window.dispose();
+		new TriviaMazeMain();
 	}
 
 	public void save(String theSave) throws IOException {
@@ -175,7 +197,7 @@ public class GUI implements Serializable{
 		out.close();
 		fileOut.close();
 
-		System.out.println("Game is saved!");
+		JOptionPane.showMessageDialog(null, "Saved!");
 
 	}
 
@@ -202,7 +224,7 @@ public class GUI implements Serializable{
 
 		ImageIcon roomBackgroud = new ImageIcon(getClass().getClassLoader().getResource("room.png"));
 		fieldLabel[1].setIcon(roomBackgroud);
-		
+
 	}
 
 	// int fNumber, int objx, int objy, int objWidth, int objHeight, String objFileNAme
@@ -216,6 +238,44 @@ public class GUI implements Serializable{
 		doorTop.setBorderPainted(false);
 		doorTop.addActionListener(tmm.aHandler);
 		doorTop.setActionCommand("goForward");
+		doorTop.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(doorTop != null) {
+					if(myGrid[myGridLocation.x][myGridLocation.y].myDoors[0].isClosed()) {
+						myGrid[myGridLocation.x][myGridLocation.y].myDoors[0].setOpenOrLock(myQuestion, null, null);
+					}
+
+				}
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+		});
 
 		doorBottom = new JButton();
 		doorBottom.setBounds(240, 432, 48, 96);
@@ -225,6 +285,44 @@ public class GUI implements Serializable{
 		doorBottom.setBorderPainted(false);
 		doorBottom.addActionListener(tmm.aHandler);
 		doorBottom.setActionCommand("goBack");
+		doorBottom.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(doorTop != null) {
+					if(myGrid[myGridLocation.x][myGridLocation.y].myDoors[1].isClosed()) {
+						myGrid[myGridLocation.x][myGridLocation.y].myDoors[1].setOpenOrLock(myQuestion, null, null);
+					}
+
+				}
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+		});
 
 		doorLeft = new JButton();
 		doorLeft.setBounds(0, 216, 48, 96);
@@ -234,6 +332,45 @@ public class GUI implements Serializable{
 		doorLeft.setBorderPainted(false);
 		doorLeft.addActionListener(tmm.aHandler);
 		doorLeft.setActionCommand("goLeft");
+		doorLeft.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(doorLeft != null) {
+					if(myGrid[myGridLocation.x][myGridLocation.y].myDoors[2].isClosed()) {
+						myGrid[myGridLocation.x][myGridLocation.y].myDoors[2].setOpenOrLock(myQuestion, null, null);
+					}
+
+				}
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+		});
+
 
 		doorRight = new JButton();
 		doorRight.setBounds(480, 216, 48, 96);
@@ -243,6 +380,44 @@ public class GUI implements Serializable{
 		doorRight.setBorderPainted(false);
 		doorRight.addActionListener(tmm.aHandler);
 		doorRight.setActionCommand("goBack");
+		doorRight.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(doorRight != null) {
+					if(myGrid[myGridLocation.x][myGridLocation.y].myDoors[3].isClosed()) {
+						myGrid[myGridLocation.x][myGridLocation.y].myDoors[3].setOpenOrLock(myQuestion, null, null);
+					}
+
+				}
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+		});
 
 		ImageIcon door = new ImageIcon(getClass().getClassLoader().getResource("door.png"));
 		doorTop.setIcon(door);
@@ -282,37 +457,82 @@ public class GUI implements Serializable{
 
 		chestB.setVisible(true);
 	}
-	
-	public void creatInoutBox() {
-		
+
+	public void creatInoutBox(JButton theEnterB) {
+
 		textPanel = new JPanel();
 		textPanel.setBounds(50, 620, 500, 100);
 		textPanel.setBackground(Color.black);
-		
+
 		textLabel = new JLabel("Enter your answer here");
 		textLabel.setForeground(Color.white);
 		textLabel.setFont(normalFont);
-		
+
 		textPanel.add(textLabel);
 		con.add(textPanel);
-		
+
 		inputPanel = new JPanel();
 		inputPanel.setBounds(50, 720, 500, 50);
 		inputPanel.setBackground(Color.black);
 		inputPanel.setLayout(new GridLayout(1,2));
-		
+
 		jtf = new JTextField();
 		inputPanel.add(jtf);
-		
+
 		enterB = new JButton("ENTER");
 		enterB.setForeground(Color.black);
 		enterB.addActionListener(tmm.iHandler);
 		enterB.setActionCommand("enter answer");
-		
+
 		inputPanel.add(enterB);
 		con.add(inputPanel);
-		
+
 	}
-	
-	
+
+	public boolean hasPath() {
+		LinkedList<Room> linkedList = new LinkedList<Room>();
+		HashSet<Room> hashSet = new HashSet<Room>();
+		linkedList.push(myGrid[myGridLocation.x][myGridLocation.y]);
+		Room current = null;
+		int x, y;
+		do {
+			current = linkedList.pop();
+			hashSet.add(current);
+			if (hashSet.contains(myGrid[myGrid.length - 1][myGrid[0].length - 1])) {
+				return true;
+			}
+			x = current.getX();
+			y = current.getY();
+			if (x + 1 < myGrid.length) {
+				if (!myGrid[x][y].getDoor(Direction.RIGHT).isLocked() && !hashSet.contains(myGrid[x + 1][y])) {
+					linkedList.push(myGrid[x + 1][y]);
+					hashSet.add(myGrid[x + 1][y]);
+				}
+			}
+			if (x - 1 >= 0) {
+				if (!myGrid[x][y].getDoor(Direction.LEFT).isLocked() && !hashSet.contains(myGrid[x - 1][y])) {
+					linkedList.push(myGrid[x - 1][y]);
+					hashSet.add(myGrid[x - 1][y]);
+				}
+			}
+			if (y + 1 < myGrid[0].length) {
+				if (!myGrid[x][y].getDoor(Direction.DOWN).isLocked() && !hashSet.contains(myGrid[x][y + 1])) {
+					linkedList.push(myGrid[x][y + 1]);
+					hashSet.add(myGrid[x][y + 1]);
+				}
+			}
+			if (y - 1 >= 0) {
+				if (!myGrid[x][y].getDoor(Direction.UP).isLocked() && !hashSet.contains(myGrid[x][y - 1])) {
+					linkedList.push(myGrid[x][y - 1]);
+					hashSet.add(myGrid[x][y - 1]);
+				}
+			}
+		} while(!linkedList.isEmpty());
+		return false;
+	}
+
+	public boolean win() {
+		return myGridLocation.x == myGrid.length - 1 && myGridLocation.y == myGrid[0].length - 1;
+	}
+
 }

@@ -1,9 +1,13 @@
 package Controller;
+
 import java.sql.Connection;
 import java.sql.Statement;
+import java.util.Random;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import Model.Question;
+import Model.TriviaMazeMain;
 
 public class SqliteDB {
 	Connection c = null;
@@ -23,12 +27,27 @@ public class SqliteDB {
 	}
 	
 	//method that gets certain information from the database based on the id and the info string parameters. 
-	public String getFromID(final int theId, final String theInfo) {
+	public Question getFromID(final int theId, TriviaMazeMain tmm) {
 		try {
 			this.stmt =c.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM TriviaQuestions WHERE id = " + theId); //gets all the information from the row with this id
-			while(rs.next()) {
-				return rs.getString(theInfo); //returns the coresponding info is in the column pointed to in this string here
+			if(rs.next()) {
+				String q = rs.getString("Question");
+				String type = rs.getString("Type");
+				String correct = rs.getString("Answer");
+				String[] answers = new String[4];
+				Random rand = new Random();
+				int correctIndex = rand.nextInt(4) + 1;
+				for(int i = 1; i <= 3; i++) {
+					if(correctIndex == i) {
+						answers[i-1] = correct;
+						answers[3] = rs.getString("Wrong"+i);
+					}
+					else {
+						answers[i-1] = rs.getString("Wrong"+i);						
+					}
+				}
+				return new Question(q, answers, correctIndex, type, tmm);
 			}
 		} catch (Exception e) {
 			System.out.print("Expection: " + e);

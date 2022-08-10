@@ -1,11 +1,12 @@
 package Model;
 
+import java.awt.Point;
 import java.io.*;
 
-import javax.swing.ImageIcon;
-import javax.swing.JTextArea;
+import javax.swing.*;
 
 import View.GUI;
+import Model.Question;
 
 public class Door implements Serializable{
 
@@ -22,18 +23,26 @@ public class Door implements Serializable{
 	private int myWidth;
 
 	private int myHeight;
-	
+
 	private Question question;
-	
+
 	private GUI gui;
-	
-	public Door(int theX, int theY, int theWidth, int theHeight, String theQuestion) {
+
+	private GUI messageText;
+
+	GUI myGrid[][];
+
+	private Point myGridLocation;
+
+	public Door(int theX, int theY, int theWidth, int theHeight, String theQuestion, GUI rightText) {
 		myX = theX;
 		myY = theY;
 		myWidth = theWidth;
 		myHeight = theHeight;
 		myAccess = AccessLevel.CLOSED;
 		myQuestion = theQuestion;	
+		messageText = rightText;
+		
 	}
 
 	public boolean isOpened() {
@@ -70,38 +79,55 @@ public class Door implements Serializable{
 
 	// if answer is correct, open the door. otherwise the door is locked
 	public void setOpenOrLock(Question theInput, GUI rightText, ImageIcon theDoor) {
-		
+
 		if(theInput.attempt(1)) {
 			myAccess = AccessLevel.OPEN;
 			theDoor.setImage(null);
-//			ImageIcon door = new ImageIcon(getClass().getClassLoader().getResource(""));
+			ImageIcon door = new ImageIcon(getClass().getClassLoader().getResource(""));
 		} else {
 			myAccess = AccessLevel.LOCKED;
-//			rightText.messageText1.getAccessibleContext().setAccessibleDescription("The door is locked forever!");;
+			theDoor.setImage(null);
+			if (!myGrid[myGridLocation.x][myGridLocation.y].hasPath()) {
+				JOptionPane.showMessageDialog(null, "YOU LOSE!");
+			}
+			rightText.messageText.getAccessibleContext().setAccessibleDescription("The door is locked forever!");;
 		}
-		
+
 		if(theInput.attempt(2)) {
 			myAccess = AccessLevel.OPEN;
+			theDoor.setImage(null);
 		} else {
 			myAccess = AccessLevel.LOCKED;
-//			rightText.messageText1.getAccessibleContext().setAccessibleDescription("The door is locked forever!");;
+			theDoor.setImage(null);
+			if (!myGrid[myGridLocation.x][myGridLocation.y].hasPath()) {
+				JOptionPane.showMessageDialog(null, "YOU LOSE!");
+			}
+			rightText.messageText.getAccessibleContext().setAccessibleDescription("The door is locked forever!");;
 		}
-		
+
 		if(theInput.attempt(3)) {
 			myAccess = AccessLevel.OPEN;
+			theDoor.setImage(null);
 		} else {
 			myAccess = AccessLevel.LOCKED;
-//			rightText.messageText1.getAccessibleContext().setAccessibleDescription("The door is locked forever!");;
+			theDoor.setImage(null);
+			if (!myGrid[myGridLocation.x][myGridLocation.y].hasPath()) {
+				JOptionPane.showMessageDialog(null, "YOU LOSE!");
+			}
+			rightText.messageText.getAccessibleContext().setAccessibleDescription("The door is locked forever!");;
 		}
-		
+
 		if(theInput.attempt(4)) {
 			myAccess = AccessLevel.OPEN;
+			theDoor.setImage(null);
 		} else {
 			myAccess = AccessLevel.LOCKED;
-//			rightText.messageText1.getAccessibleContext().setAccessibleDescription("The door is locked forever!");;
+			theDoor.setImage(null);
+			if (!myGrid[myGridLocation.x][myGridLocation.y].hasPath()) {
+				JOptionPane.showMessageDialog(null, "YOU LOSE!");
+			}
+			rightText.messageText.getAccessibleContext().setAccessibleDescription("The door is locked forever!");;
 		}
-
-
 	}
 
 }
