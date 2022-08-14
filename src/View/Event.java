@@ -83,8 +83,8 @@ public class Event {
 		// to see if the door is already been opened
 		else if (myTmm.gui.getMyCurrentRoom().getDoor(Direction.DOWN).getAccessLevel() == AccessLevel.OPEN) {
 			myTmm.gui.setMessageText("This door is opened, you can go through.");
-			if (myTmm.gui.getMyCurrentRoom().myDoors[0] != null) {
-				if (myTmm.gui.getMyCurrentRoom().myDoors[0].isOpened()) {
+			if (myTmm.gui.getMyCurrentRoom().myDoors[2] != null) {
+				if (myTmm.gui.getMyCurrentRoom().myDoors[2].isOpened()) {
 					myTmm.gui.moveToken(myTmm.gui.getMyGridLocation().x, myTmm.gui.getMyGridLocation().y + 1);
 					myTmm.gui.getMyMazeMap().repaint();
 				}
@@ -127,8 +127,8 @@ public class Event {
 		// to see if the door is already been opened
 		else if (myTmm.gui.getMyCurrentRoom().getDoor(Direction.LEFT).getAccessLevel() == AccessLevel.OPEN) {
 			myTmm.gui.setMessageText("This door is opened, you can go through.");
-			if (myTmm.gui.getMyCurrentRoom().myDoors[0] != null) {
-				if (myTmm.gui.getMyCurrentRoom().myDoors[0].isOpened()) {
+			if (myTmm.gui.getMyCurrentRoom().myDoors[3] != null) {
+				if (myTmm.gui.getMyCurrentRoom().myDoors[3].isOpened()) {
 					myTmm.gui.moveToken(myTmm.gui.getMyGridLocation().x - 1, myTmm.gui.getMyGridLocation().y);
 					myTmm.gui.getMyMazeMap().repaint();
 				}
@@ -171,8 +171,8 @@ public class Event {
 		// to see if the door is already been opened
 		else if (myTmm.gui.getMyCurrentRoom().getDoor(Direction.RIGHT).getAccessLevel() == AccessLevel.OPEN) {
 			myTmm.gui.setMessageText("This door is opened, you can go through.");
-			if (myTmm.gui.getMyCurrentRoom().myDoors[0] != null) {
-				if (myTmm.gui.getMyCurrentRoom().myDoors[0].isOpened()) {
+			if (myTmm.gui.getMyCurrentRoom().myDoors[1] != null) {
+				if (myTmm.gui.getMyCurrentRoom().myDoors[1].isOpened()) {
 					myTmm.gui.moveToken(myTmm.gui.getMyGridLocation().x + 1, myTmm.gui.getMyGridLocation().y);
 					myTmm.gui.getMyMazeMap().repaint();
 				}
