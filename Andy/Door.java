@@ -75,11 +75,11 @@ public class Door implements Serializable{
 	public void draw(Maze theMazeMap) {
 		theMazeMap.addDoor(myX, myY, myWidth, myHeight);
 	}
-	
+
 	public void addOpen(Maze theMazeMap) {
 		theMazeMap.addOpen(myX + 2, myY + 2, myWidth - 4, myHeight - 4);
 	}
-	
+
 	public void addLock(Maze theMazeMap) {
 		theMazeMap.addLock(myX + 2, myY + 2, myWidth - 4, myHeight - 4);
 	}
@@ -88,7 +88,7 @@ public class Door implements Serializable{
 	public void setOpenOrLock(JButton theInputPanel, JTextArea theMessageText, Maze theMazeMap, GUI theGUI) {
 
 		if (myAccess.equals(AccessLevel.CLOSED)) {
-			
+
 			theInputPanel.addActionListener(new ActionListener() {
 
 				@Override
@@ -103,9 +103,9 @@ public class Door implements Serializable{
 					if(!theGUI.hasPath()) {
 						JOptionPane.showMessageDialog(null, "YOU LOSE!");
 					}
-					
+
 				}
-				
+
 			});
 
 		}
