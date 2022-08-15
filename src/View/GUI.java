@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.awt.event.ActionEvent;
@@ -26,6 +27,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import Controller.SqliteDB;
 import Model.Door;
 import Model.Maze;
 import Model.Question;
@@ -426,7 +429,12 @@ public class GUI implements Serializable {
 		myMazeMap.setBounds(700, 500, 300, 300);
 		myMazeMap.setBackground(Color.white);
 		myMazeMap.setLayout(null);
-		generate(myGridWidth, myGridHeight);
+		try {
+			generate(myGridWidth, myGridHeight);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		myWindow.add(myMazeMap);
 
 	}
@@ -449,7 +457,7 @@ public class GUI implements Serializable {
 	}
 
 	// theM = theN = 5
-	private void generate(int theM, int theN) {
+	private void generate(int theM, int theN) throws SQLException {
 
 		myRoomTokenWidth = myMazeMap.getWidth() / 5;
 		myRoomTokenHeight = myMazeMap.getWidth() / 5;
@@ -467,23 +475,26 @@ public class GUI implements Serializable {
 
 		myGridLocation.setLocation(0, 0);
 
+		SqliteDB db = new SqliteDB();
+		
 		Door tempDoor;
 		for (int i = 0; i < theM; i++) {
 			for (int j = 0; j < theN; j++) {
 				if (i + 1 < theM) {	
 					tempDoor = new Door( (myRoomTokenWidth * i) + myRoomTokenWidth - (myDoorDepth / 4), (myRoomTokenHeight * j) + (myRoomTokenHeight / 4),
-							myDoorDepth / 2, myRoomTokenHeight / 2);
+							myDoorDepth / 2, myRoomTokenHeight / 2, db.getRandomQuestion(myTmm));
 					myGrid[i][j].setDoor( Direction.RIGHT, tempDoor);
 					myGrid[i+1][j].setDoor( Direction.LEFT, tempDoor);
 				}
 				if (j + 1 < theN) { 
 					tempDoor = new Door( (myRoomTokenWidth * i) + (myRoomTokenWidth / 4), (myRoomTokenHeight * j) + myRoomTokenHeight - (myDoorDepth / 4),
-							myRoomTokenWidth / 2, myDoorDepth / 2);
+							myRoomTokenWidth / 2, myDoorDepth / 2, db.getRandomQuestion(myTmm));
 					myGrid[i][j].setDoor( Direction.DOWN, tempDoor );
 					myGrid[i][j+1].setDoor( Direction.UP, tempDoor );
 				}
 			}
 		}
+		db.closeConnection();
 		draw();
 	}
 

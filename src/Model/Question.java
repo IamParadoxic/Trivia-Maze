@@ -12,17 +12,7 @@ public class Question implements Serializable{
 	 */
 	private static final long serialVersionUID = 2463437303534008861L;
 	
-	public enum QuestionType {
-		TF{
-			@Override
-			public String toString() { return "True False";}
-		}, MC{
-			@Override
-			public String toString() { return "Multiple Choice";}
-		}, SA{
-			@Override
-			public String toString() { return "Short Answer";}}
-	};
+	public enum QuestionType {TF, MC,SA};
 	
 	private QuestionType myType;
 	
@@ -51,8 +41,8 @@ public class Question implements Serializable{
 		}
 	}
 	
-	public String getType() {
-		return myType.name();
+	public QuestionType getType() {
+		return myType;
 	}
 	
 	public boolean attempt(int theInput) {
@@ -74,7 +64,7 @@ public class Question implements Serializable{
 			theAnswerLabels[i].setVisible(true);
 		}
 	}
-
+	
 	public void textAnswers(JButton theEnterB, JLabel theQuestionLabel, JTextArea theMessageText) {
 		
 		for (int i = 0; i < theEnterB.getAncestorListeners().length; i++) {
@@ -92,6 +82,29 @@ public class Question implements Serializable{
 				theMessageText.setVisible(true);
 			}
 		}
+	}
+	
+	//lil
+	protected String getQuestion() {
+		String temp = "";
+		switch(myType) {
+		case MC:
+			temp = myQuestion;
+			for(int i = 0; i < 4; i++) {
+				temp = temp + "\n" + (i+1) + ") " + myAnswers[i]; 
+			}
+			break;
+		case SA:
+			temp = myQuestion;
+			break;
+		case TF:
+			temp = "True or False?\n" + myQuestion;
+			break;
+		}
+		return temp;
+	}
+	String getAnswer(final int theIndex) {
+		return myAnswers[theIndex];
 	}
 
 }
