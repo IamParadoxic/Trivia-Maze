@@ -54,18 +54,38 @@ public class SqliteDB {
 				String correct = rs.getString("Answer");
 				String[] answers = new String[4];
 				Random rand = new Random();
-				int correctIndex = rand.nextInt(4) + 1;
-				for(int i = 1; i <= 3; i++) {
-					if(correctIndex == i) {
-						answers[i-1] = correct;
-						answers[3] = rs.getString("Wrong"+i);
-					}
-					else {
-						answers[i-1] = rs.getString("Wrong"+i);						
+				int correctIndex = 0;
+				//if statement that will randomize where in the array of answers the correct one is if it's multiple choice, and will then fill the array with the preprovided wrong answers
+				if(type.equals("MC")) {
+					correctIndex = rand.nextInt(4);
+					answers[correctIndex] = correct;
+					for(int i = 0; i < 3; i++) {
+						if(correctIndex == i) {
+							answers[3] = rs.getString("Wrong"+(i+1));
+						}
+						else {
+							answers[i] = rs.getString("Wrong"+(i+1));
+						}
 					}
 				}
+				//check if the question is a true false one, and depending on the answer, sets the correct index to 0 or 1, true or false
+				else if(type.equals("TF")) {
+					if(correct.equals("True")) {
+						correctIndex = 0;
+					}
+					else {
+						correctIndex = 1;
+					}
+					answers[0] = "True";
+					answers[1] = "False";
+				}
+				//now if it's not a mc or tf, then it has to be short answer, which will store the correct answer in the 0 index
+				else {
+					answers[0] = correct;
+				}
+
 				track.add(theId);
-				return new Question(q, answers, (correctIndex - 1), type, tmm);
+				return new Question(q, answers, correctIndex, type, tmm);
 			}
 		} catch (Exception e) {
 			System.out.print("Expection: " + e);
