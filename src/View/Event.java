@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
-import Model.Door;
 import Model.Door.AccessLevel;
 import Model.Room.Direction;
 
@@ -46,9 +45,10 @@ public class Event {
 				if (myTmm.gui.getMyCurrentRoom().myDoors[0].isOpened()) {
 					myTmm.gui.moveToken(myTmm.gui.getMyGridLocation().x, myTmm.gui.getMyGridLocation().y - 1);
 					myTmm.gui.getMyMazeMap().repaint();
+					System.out.println("test");
 				}
-				myTmm.gui.getChestClosed().setVisible(false);
-				myTmm.gui.getChestOpened().setVisible(false);
+				myTmm.gui.getChestClosed().setVisible(true);
+				myTmm.gui.getChestOpened().setVisible(true);
 			}
 		}
 
@@ -66,7 +66,8 @@ public class Event {
 
 			// if player doesn't have key
 			else {
-				myTmm.gui.setMessageText("Door is closed, answer the question.\n" + myTmm.gui.getMyCurrentRoom().getDoor(myActDirection).getQuestion());
+				myTmm.gui.setMessageText("Door is closed, answer the question.\n" + "\n"
+						+ myTmm.gui.getMyCurrentRoom().getDoor(myActDirection).getQuestion());
 			}
 		}
 	}
@@ -92,8 +93,8 @@ public class Event {
 					myTmm.gui.moveToken(myTmm.gui.getMyGridLocation().x, myTmm.gui.getMyGridLocation().y + 1);
 					myTmm.gui.getMyMazeMap().repaint();
 				}
-				myTmm.gui.getChestClosed().setVisible(false);
-				myTmm.gui.getChestOpened().setVisible(false);
+				myTmm.gui.getChestClosed().setVisible(true);
+				myTmm.gui.getChestOpened().setVisible(true);
 			}
 		}
 
@@ -111,7 +112,8 @@ public class Event {
 
 			// if player doesn't have key
 			else {
-				myTmm.gui.setMessageText("Door is closed, answer the question.\n" + myTmm.gui.getMyCurrentRoom().getDoor(myActDirection).getQuestion());
+				myTmm.gui.setMessageText("Door is closed, answer the question.\n" + "\n"
+						+ myTmm.gui.getMyCurrentRoom().getDoor(myActDirection).getQuestion());
 			}
 		}
 	}
@@ -136,8 +138,8 @@ public class Event {
 					myTmm.gui.moveToken(myTmm.gui.getMyGridLocation().x - 1, myTmm.gui.getMyGridLocation().y);
 					myTmm.gui.getMyMazeMap().repaint();
 				}
-				myTmm.gui.getChestClosed().setVisible(false);
-				myTmm.gui.getChestOpened().setVisible(false);
+				myTmm.gui.getChestClosed().setVisible(true);
+				myTmm.gui.getChestOpened().setVisible(true);
 			}
 		}
 
@@ -155,7 +157,8 @@ public class Event {
 
 			// if player don't have key
 			else {
-				myTmm.gui.setMessageText("Door is closed, answer the question.\n" + myTmm.gui.getMyCurrentRoom().getDoor(myActDirection).getQuestion());
+				myTmm.gui.setMessageText("Door is closed, answer the question.\n" + "\n"
+						+ myTmm.gui.getMyCurrentRoom().getDoor(myActDirection).getQuestion());
 			}
 		}
 	}
@@ -180,8 +183,8 @@ public class Event {
 					myTmm.gui.moveToken(myTmm.gui.getMyGridLocation().x + 1, myTmm.gui.getMyGridLocation().y);
 					myTmm.gui.getMyMazeMap().repaint();
 				}
-				myTmm.gui.getChestClosed().setVisible(false);
-				myTmm.gui.getChestOpened().setVisible(false);
+				myTmm.gui.getChestClosed().setVisible(true);
+				myTmm.gui.getChestOpened().setVisible(true);
 			}
 		}
 
@@ -199,23 +202,26 @@ public class Event {
 
 			// if player doesn't have key
 			else {
-				myTmm.gui.setMessageText("Door is closed, answer the question.\n" + myTmm.gui.getMyCurrentRoom().getDoor(myActDirection).getQuestion());
+				myTmm.gui.setMessageText("Door is closed, answer the question.\n" + "\n"
+						+ myTmm.gui.getMyCurrentRoom().getDoor(myActDirection).getQuestion());
 			}
 		}
 	}
 
 	public void submit() {
 
-		myScan = new Scanner (myTmm.gui.getJTF().getText());
+		myScan = new Scanner(myTmm.gui.getJTF().getText());
 
-		//wait for input
+		// wait for input
 		while (myScan.hasNextLine()) {
 			String s = myScan.nextLine();
 
 			// if has key
-			if (myUseKey && !mySkipKey) {
+			if (myUseKey) {
+
 				// if use
 				if (s.equals("K") || s.equals("k")) {
+
 					// key used
 					myUseKey = false;
 					myTmm.gui.setKey(false);
@@ -226,39 +232,43 @@ public class Event {
 				} else {
 
 					// go back to answer question
-					// TO-DO
 					mySkipKey = true;
-					myTmm.gui.getJTF().setText("");					
+					myTmm.gui.getJTF().setText("");
 				}
 			} else {
 
 				// answer question
-				// TO-DO
 				ansQuestion();
 			}
 		}
 
 		// chose the direction
 		switch (myActDirection) {
-		case UP: goForward();
-		break;
-		case DOWN: goBack();
-		break;
-		case LEFT: goLeft();
-		break;
-		case RIGHT: goRight();
-		break;
+		case UP:
+			goForward();
+			break;
+		case DOWN:
+			goBack();
+			break;
+		case LEFT:
+			goLeft();
+			break;
+		case RIGHT:
+			goRight();
+			break;
 		}
-		//checks for if you've won, since if you've correctly answered a question, you'd move onto a next room, and thus this is to check if you've won or not yet.
+		
+		// checks for if you've won, since if you've correctly answered a question, you'd move onto a next room, and thus this is to check if you've won or not yet.
 		if (myTmm.gui.win()) {
 			JOptionPane.showMessageDialog(null, "YOU'VE WON!");
 		}
 	}
 
 	public void ansQuestion() {
-		//runs the answer method in the door class, which will check if the inputed answer is correct
+
+		// runs the answer method in the door class, which will check if the inputed answer is correct
 		myTmm.gui.getMyCurrentRoom().getDoor(myActDirection).answer(myTmm.gui.getJTF().getText(), myTmm.gui.getMyMazeMap(), myTmm.gui);
-		//code for clearing whatever was in the user input text field
+		// code for clearing whatever was in the user input text field
 		myTmm.gui.getJTF().setText("");
 		mySkipKey = false;
 	}

@@ -31,7 +31,6 @@ import javax.swing.JTextField;
 import Controller.SqliteDB;
 import Model.Door;
 import Model.Maze;
-import Model.Question;
 import Model.Room;
 import Model.Room.Direction;
 
@@ -52,60 +51,19 @@ public class GUI implements Serializable {
 	private JPanel myTextPanel, inputPanel;
 	private Font normalFont = new Font("Times New Roman", Font.PLAIN, 26);
 	private JTextField myJTF;
-	Maze myMazeMap = new Maze(new BorderLayout());
+	private Maze myMazeMap = new Maze(new BorderLayout());
 	private int myRoomTokenWidth, myRoomTokenHeight, myPlayerTokenWidth, myDoorDepth;
-	Room myGrid[][];
+	private Room myGrid[][];
 	private int myGridWidth = 5;
 	private int myGridHeight = 5;
-	Point myGridLocation = new Point(0, 0);
+	private Point myGridLocation = new Point(0, 0);
 	private boolean myKey = false;
 
-	public JTextField getJTF() {
-		return myJTF;
-	}
-
-	public JLabel getTextLabel() {
-		return myTextLabel;
-	}
-
-	public JButton getChestClosed() {
-		return myChestClosed;
-	}
-
-	public JLabel getChestOpened() {
-		return myChestOpened;
-	}
-
-	public boolean getKey() {
-		return myKey;
-	}
-
-	public void setKey(boolean theHasKey) {
-		myKey = theHasKey;
-	}
-	
-	public Point getMyGridLocation() {
-		return myGridLocation;
-	}
-	
-	public Maze getMyMazeMap() {
-		return myMazeMap;
-	}
-	
-	public Room getMyGrid(int theM, int theN) {
-		return myGrid[theM][theN];
-	}
-
-	public Room getMyCurrentRoom() {
-		return myGrid[myGridLocation.x][myGridLocation.y];
-	}
-
-	public void setMessageText(String str) {
-		myMessageText.setText("");
-		myMessageText.append(str);
-		myMessageText.paintImmediately(myMessageText.getBounds());
-	}
-
+	/**
+	 * Constructor of GUI class, create everything
+	 * 
+	 * @param theTmm main class
+	 */
 	public GUI(TriviaMazeMain theTmm) {
 
 		this.myTmm = theTmm;
@@ -122,6 +80,9 @@ public class GUI implements Serializable {
 		myWindow.setVisible(true);
 	}
 
+	/**
+	 * To create the main Frame where everything is.
+	 */
 	public void createFrame() {
 		// the main window.
 		myWindow = new JFrame("Trivia Maze");
@@ -200,11 +161,16 @@ public class GUI implements Serializable {
 		myWindow.setJMenuBar(myMenuBar);
 	}
 
+	/**
+	 * To create the question box.
+	 * 
+	 * @param theMessageText the message printed in the box
+	 */
 	public void creatQuestionBox(JTextArea theMessageText) {
 
 		myMessageText = new JTextArea("Questions and descriptions");
 		myMessageText.setBounds(600, 0, 500, 500);
-		myMessageText.setBackground(Color.red);
+		myMessageText.setBackground(Color.black);
 		myMessageText.setForeground(Color.white);
 		myMessageText.setEditable(false);
 		myMessageText.setLineWrap(true);
@@ -251,6 +217,9 @@ public class GUI implements Serializable {
 
 	}
 
+	/**
+	 * To create the main room picture.
+	 */
 	public void createMainField() {
 
 		myFieldPanel[1] = new JPanel();
@@ -267,6 +236,9 @@ public class GUI implements Serializable {
 
 	}
 
+	/**
+	 * To create doors in the room, and link it with action handler
+	 */
 	public void createDoors() {
 
 		myDoorUp = new JButton();
@@ -274,7 +246,6 @@ public class GUI implements Serializable {
 		myDoorUp.setBackground(null);
 		myDoorUp.setContentAreaFilled(false);
 		myDoorUp.setFocusPainted(false);
-		// doorTop.setBorderPainted(false);
 		myDoorUp.addActionListener(myTmm.aHandler);
 		myDoorUp.setActionCommand("goForward");
 
@@ -283,7 +254,6 @@ public class GUI implements Serializable {
 		myDoorDown.setBackground(null);
 		myDoorDown.setContentAreaFilled(false);
 		myDoorDown.setFocusPainted(false);
-		// doorBottom.setBorderPainted(false);
 		myDoorDown.addActionListener(myTmm.aHandler);
 		myDoorDown.setActionCommand("goBack");
 
@@ -292,7 +262,6 @@ public class GUI implements Serializable {
 		myDoorLeft.setBackground(null);
 		myDoorLeft.setContentAreaFilled(false);
 		myDoorLeft.setFocusPainted(false);
-		// doorLeft.setBorderPainted(false);
 		myDoorLeft.addActionListener(myTmm.aHandler);
 		myDoorLeft.setActionCommand("goLeft");
 
@@ -301,7 +270,6 @@ public class GUI implements Serializable {
 		myDoorRight.setBackground(null);
 		myDoorRight.setContentAreaFilled(false);
 		myDoorRight.setFocusPainted(false);
-		// doorRight.setBorderPainted(false);
 		myDoorRight.addActionListener(myTmm.aHandler);
 		myDoorRight.setActionCommand("goRight");
 
@@ -319,6 +287,11 @@ public class GUI implements Serializable {
 		myFieldPanel[1].add(myFieldLabel[1]);
 	}
 
+	/**
+	 * To create cheat chest and link it with action handler.
+	 * 
+	 * @param ifClosed if the chest is closed
+	 */
 	public void createChest(boolean ifClosed) {
 
 		myChestClosed = new JButton();
@@ -344,6 +317,11 @@ public class GUI implements Serializable {
 		myChestClosed.setVisible(true);
 	}
 
+	/**
+	 * To create the input box below.
+	 * 
+	 * @param theEnterB the enter button
+	 */
 	public void creatInoutBox(JButton theEnterB) {
 
 		myTextPanel = new JPanel();
@@ -375,7 +353,12 @@ public class GUI implements Serializable {
 		myContainer.add(inputPanel);
 
 	}
-
+	
+	/**
+	 * To check if there is still path to the winning room.
+	 *  
+	 * @return false means lost
+	 */
 	public boolean hasPath() {
 
 		LinkedList<Room> linkedList = new LinkedList<Room>();
@@ -420,10 +403,19 @@ public class GUI implements Serializable {
 		return false;
 	}
 
+	/**
+	 * To check if the player reaches the final room.
+	 *  
+	 * @return true means won
+	 */
 	public boolean win() {
 		return myGridLocation.x == myGrid.length - 1 && myGridLocation.y == myGrid[0].length - 1;
 	}
 
+	
+	/**
+	 * Create a min map on the left down corner.
+	 */
 	public void createMap() {
 
 		myMazeMap.setBounds(700, 500, 300, 300);
@@ -439,24 +431,29 @@ public class GUI implements Serializable {
 
 	}
 
+	/**
+	 * Draw the player token showed in the min map.
+	 */
 	public void draw() {
 
-		if (!myMazeMap.hasPlayerToken()){	
+		if (!myMazeMap.hasPlayerToken()) {
 			myMazeMap.addPlayerToken(25, 25, 10, 10);
 		}
-
-		final GUI thisMap = this;
-
 		for (int i = 0; i < myGrid.length; i++) {
 			for (int j = 0; j < myGrid[i].length; j++) {
 				myGrid[i][j].draw(myMazeMap);
 			}
 		}
-
 		myMazeMap.repaint();
 	}
 
-	// theM = theN = 5
+	/**
+	 * Generate the entire maze.
+	 * 
+	 * @param theM Width X = 5
+	 * @param theN Height Y = 5
+	 * @throws SQLException 
+	 */
 	private void generate(int theM, int theN) throws SQLException {
 
 		myRoomTokenWidth = myMazeMap.getWidth() / 5;
@@ -468,29 +465,31 @@ public class GUI implements Serializable {
 		for (int i = 0; i < theM; i++) {
 			myGrid[i] = new Room[theN];
 			for (int j = 0; j < theN; j++) {
-				myGrid[i][j] = new Room(myRoomTokenWidth*i,myRoomTokenHeight*j, 
-						myRoomTokenWidth, myRoomTokenHeight, new Point(i,j));	
+				myGrid[i][j] = new Room(myRoomTokenWidth * i, myRoomTokenHeight * j, myRoomTokenWidth,
+						myRoomTokenHeight, new Point(i, j));
 			}
 		}
 
 		myGridLocation.setLocation(0, 0);
 
 		SqliteDB db = new SqliteDB();
-		
+
 		Door tempDoor;
 		for (int i = 0; i < theM; i++) {
 			for (int j = 0; j < theN; j++) {
-				if (i + 1 < theM) {	
-					tempDoor = new Door( (myRoomTokenWidth * i) + myRoomTokenWidth - (myDoorDepth / 4), (myRoomTokenHeight * j) + (myRoomTokenHeight / 4),
-							myDoorDepth / 2, myRoomTokenHeight / 2, db.getRandomQuestion(myTmm));
-					myGrid[i][j].setDoor( Direction.RIGHT, tempDoor);
-					myGrid[i+1][j].setDoor( Direction.LEFT, tempDoor);
+				if (i + 1 < theM) {
+					tempDoor = new Door((myRoomTokenWidth * i) + myRoomTokenWidth - (myDoorDepth / 4),
+							(myRoomTokenHeight * j) + (myRoomTokenHeight / 4), myDoorDepth / 2, myRoomTokenHeight / 2,
+							db.getRandomQuestion(myTmm));
+					myGrid[i][j].setDoor(Direction.RIGHT, tempDoor);
+					myGrid[i + 1][j].setDoor(Direction.LEFT, tempDoor);
 				}
-				if (j + 1 < theN) { 
-					tempDoor = new Door( (myRoomTokenWidth * i) + (myRoomTokenWidth / 4), (myRoomTokenHeight * j) + myRoomTokenHeight - (myDoorDepth / 4),
-							myRoomTokenWidth / 2, myDoorDepth / 2, db.getRandomQuestion(myTmm));
-					myGrid[i][j].setDoor( Direction.DOWN, tempDoor );
-					myGrid[i][j+1].setDoor( Direction.UP, tempDoor );
+				if (j + 1 < theN) {
+					tempDoor = new Door((myRoomTokenWidth * i) + (myRoomTokenWidth / 4),
+							(myRoomTokenHeight * j) + myRoomTokenHeight - (myDoorDepth / 4), myRoomTokenWidth / 2,
+							myDoorDepth / 2, db.getRandomQuestion(myTmm));
+					myGrid[i][j].setDoor(Direction.DOWN, tempDoor);
+					myGrid[i][j + 1].setDoor(Direction.UP, tempDoor);
 				}
 			}
 		}
@@ -498,17 +497,76 @@ public class GUI implements Serializable {
 		draw();
 	}
 
+	/**
+	 * Move player token and track room/door status.
+	 * 
+	 * @param theM Coordinate x
+	 * @param theN Coordinate y
+	 */
 	public void moveToken(int theM, int theN) {
-		if(theM <= 4 || theN <= 4) {
+		if (theM <= 4 || theN <= 4) {
 			myGridLocation.setLocation(theM, theN);
-			myMazeMap.movePlayer((myGridLocation.x * myRoomTokenWidth) + (myRoomTokenWidth / 2) - (myPlayerTokenWidth / 2),
+			myMazeMap.movePlayer(
+					(myGridLocation.x * myRoomTokenWidth) + (myRoomTokenWidth / 2) - (myPlayerTokenWidth / 2),
 					(myGridLocation.y * myRoomTokenHeight) + (myRoomTokenHeight / 2) - (myPlayerTokenWidth / 2));
 			myMazeMap.repaint();
-			}
+		}
 	}
 
+	/**
+	 * To set door status.
+	 * 
+	 * @param theDirection witch door in the room
+	 */
 	public void setOpenOrLock(Direction theDirection) {
 		myGrid[myGridLocation.x][myGridLocation.y].setOpenOrLock(theDirection, myEnterButton, myMessageText, myMazeMap, this);
 		draw();
 	}
+	
+	public JTextField getJTF() {
+		return myJTF;
+	}
+
+	public JLabel getTextLabel() {
+		return myTextLabel;
+	}
+
+	public JButton getChestClosed() {
+		return myChestClosed;
+	}
+
+	public JLabel getChestOpened() {
+		return myChestOpened;
+	}
+
+	public boolean getKey() {
+		return myKey;
+	}
+
+	public void setKey(boolean theHasKey) {
+		myKey = theHasKey;
+	}
+
+	public Point getMyGridLocation() {
+		return myGridLocation;
+	}
+
+	public Maze getMyMazeMap() {
+		return myMazeMap;
+	}
+
+	public Room getMyGrid(int theM, int theN) {
+		return myGrid[theM][theN];
+	}
+
+	public Room getMyCurrentRoom() {
+		return myGrid[myGridLocation.x][myGridLocation.y];
+	}
+
+	public void setMessageText(String str) {
+		myMessageText.setText("");
+		myMessageText.append(str);
+		myMessageText.paintImmediately(myMessageText.getBounds());
+	}
+
 }
