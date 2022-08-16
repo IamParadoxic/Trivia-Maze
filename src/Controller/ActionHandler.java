@@ -43,6 +43,8 @@ public class ActionHandler implements ActionListener , Serializable{
 		case "enter answer": myTmm.event.submit();
 			break;
 
+		case "start": myTmm.event.start();
+			break;
 		}
 	}
 

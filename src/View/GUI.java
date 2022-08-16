@@ -26,11 +26,13 @@ public class GUI implements Serializable {
 	private JMenuBar myMenuBar;
 	private JMenu myMenu[] = new JMenu[10];
 	private JMenuItem myMenuItem;
-	private JButton myDoorUp, myDoorDown, myDoorLeft, myDoorRight, myChestClosed, myEnterButton;
-	private JLabel myChestOpened, myTextLabel;
+	private JButton myDoorUp, myDoorDown, myDoorLeft, myDoorRight, myChestClosed, myEnterButton, myStartButton;
+	private JLabel myChestOpened, myTextLabel, myStartLabel;
 	private Container myContainer;
-	private JPanel myTextPanel, inputPanel;
+	private JPanel myTextPanel, inputPanel, myStartPanel;
 	private Font normalFont = new Font("Times New Roman", Font.PLAIN, 26);
+	private Font biggerFont = new Font("Times New Roman", Font.PLAIN, 50);
+	private Font titleFont = new Font("Times New Roman", Font.PLAIN, 120);
 	private JTextField myJTF;
 	private Maze myMazeMap = new Maze(new BorderLayout());
 	private int myRoomTokenWidth, myRoomTokenHeight, myPlayerTokenWidth, myDoorDepth;
@@ -40,13 +42,14 @@ public class GUI implements Serializable {
 	private Point myGridLocation = new Point(0, 0);
 	private boolean myKey = false;
 	private Room myHasChest;
-
+	
 	public GUI(TriviaMazeMain theTmm) {
 
 		this.myTmm = theTmm;
 
 		createFrame();
 		createMeunBar();
+		createStartPage();
 		creatQuestionBox(myMessageText);
 		createMainField();
 		creatInputBox(myEnterButton);
@@ -66,12 +69,37 @@ public class GUI implements Serializable {
 	public void createFrame() {
 
 		myWindow = new JFrame("Trivia Maze");
-		myWindow.setSize(1115, 900);
+		myWindow.setSize(1120, 900);
 		myWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		myWindow.getContentPane().setBackground(Color.black);
 		myWindow.setLayout(null);
 		myContainer = myWindow.getContentPane();
 
+	}
+	
+	public void createStartPage() {
+		
+		myStartPanel = new JPanel();
+		myStartPanel.setBounds(0, 0, 1120, 900);
+		myStartPanel.setBackground(Color.black);
+
+		myStartLabel = new JLabel("TRIVIA  MAZE");
+		myStartLabel.setForeground(Color.white);
+		myStartLabel.setFont(titleFont);
+		
+		myStartButton = new JButton("START");
+		myStartButton.setFont(biggerFont);
+		myStartButton.setBounds(460, 400, 200, 100);
+		myStartButton.setBackground(null);
+		myStartButton.setContentAreaFilled(false);
+		myStartButton.setFocusPainted(false);
+		myStartButton.addActionListener(myTmm.aHandler);
+		myStartButton.setActionCommand("start");
+
+		myWindow.add(myStartButton);
+		myStartPanel.add(myStartLabel);
+		myWindow.add(myStartPanel);
+		
 	}
 
 	/**
@@ -187,6 +215,7 @@ public class GUI implements Serializable {
 	 */
 	public void reset() {
 
+		myTmm.sound.stop();
 		myWindow.dispose();
 		new TriviaMazeMain();
 
@@ -352,6 +381,11 @@ public class GUI implements Serializable {
 		myFieldPanel[1].add(myDoorRight);
 
 		myFieldPanel[1].add(myFieldLabel[1]);
+		
+		myDoorUp.setVisible(false);
+		myDoorDown.setVisible(false);
+		myDoorLeft.setVisible(false);
+		myDoorRight.setVisible(false);
 	}
 
 	/**
@@ -381,7 +415,7 @@ public class GUI implements Serializable {
 		myFieldPanel[1].add(myChestClosed);
 		myFieldPanel[1].add(myChestOpened);
 
-		myChestClosed.setVisible(true);
+		myChestClosed.setVisible(false);
 	}
 
 	/**
@@ -613,6 +647,19 @@ public class GUI implements Serializable {
 	public void playLoseSound() {
 		myTmm.sound.stop();
 		myTmm.sound.play("LOSE");
+	}
+	
+	/**
+	 * Helper method that set start page invisiable.
+	 */
+	public void startGame() {
+		myStartPanel.setVisible(false);
+		myStartButton.setVisible(false);
+		myChestClosed.setVisible(true);
+		myDoorUp.setVisible(true);
+		myDoorDown.setVisible(true);
+		myDoorLeft.setVisible(true);
+		myDoorRight.setVisible(true);
 	}
 
 	public JTextField getJTF() {

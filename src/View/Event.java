@@ -20,6 +20,13 @@ public class Event implements Serializable {
 	public Event(TriviaMazeMain theTmm) {
 		this.myTmm = theTmm;
 	}
+	
+	/**
+	 * Start the game;
+	 */
+	public void start() {
+		myTmm.gui.startGame();
+	}
 
 	/**
 	 * Open chest action.
@@ -300,20 +307,16 @@ public class Event implements Serializable {
 		// chose the direction
 		switch (myActDirection) {
 
-		case UP:
-			goUp();
+		case UP: goUp();
 			break;
 			
-		case DOWN:
-			goDown();
+		case DOWN: goDown();
 			break;
 			
-		case LEFT:
-			goLeft();
+		case LEFT: goLeft();
 			break;
 			
-		case RIGHT:
-			goRight();
+		case RIGHT: goRight();
 			break;
 		}
 
