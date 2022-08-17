@@ -1,4 +1,4 @@
-package View;
+package Controller;
 
 import java.io.Serializable;
 import java.util.Scanner;
@@ -6,6 +6,7 @@ import javax.swing.JOptionPane;
 
 import Model.Door.AccessLevel;
 import Model.Room.Direction;
+import View.TriviaMazeMain;
 
 public class Event implements Serializable {
 
