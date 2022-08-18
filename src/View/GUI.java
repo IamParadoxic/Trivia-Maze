@@ -17,7 +17,7 @@ import Model.Room.Direction;
 public class GUI implements Serializable {
 
 	private static final long serialVersionUID = -7944338666566093998L;
-	
+
 	private TriviaMazeMain myTmm;
 	private JFrame myWindow;
 	private JTextArea myMessageText;
@@ -30,19 +30,19 @@ public class GUI implements Serializable {
 	private JLabel myChestOpened, myTextLabel, myStartLabel;
 	private Container myContainer;
 	private JPanel myTextPanel, inputPanel, myStartPanel;
-	private Font normalFont = new Font("Times New Roman", Font.PLAIN, 26);
-	private Font biggerFont = new Font("Times New Roman", Font.PLAIN, 50);
-	private Font titleFont = new Font("Times New Roman", Font.PLAIN, 120);
+	private Font NORMAL_FONT = new Font("Times New Roman", Font.PLAIN, 26);
+	private Font BIGGER_FONT = new Font("Times New Roman", Font.PLAIN, 50);
+	private Font TITLE_FONT = new Font("Times New Roman", Font.PLAIN, 120);
 	private JTextField myJTF;
 	private Maze myMazeMap = new Maze(new BorderLayout());
-	private int myRoomTokenWidth, myRoomTokenHeight, myPlayerTokenWidth, myDoorDepth;
+	private int myRoomWidth, myRoomHeight, myPlayerWidth, myDoorDepth;
 	private Room myGrid[][];
 	private int myGridWidth = 5;
 	private int myGridHeight = 5;
 	private Point myGridLocation = new Point(0, 0);
 	private boolean myKey = false;
 	private Room myHasChest;
-	
+
 	public GUI(TriviaMazeMain theTmm) {
 
 		this.myTmm = theTmm;
@@ -56,7 +56,7 @@ public class GUI implements Serializable {
 		createChest(true);
 		createDoors();
 		createMap();
-		
+
 		// play BGM
 		myTmm.sound.play("MUSIC");
 		myTmm.sound.loop();
@@ -76,22 +76,22 @@ public class GUI implements Serializable {
 		myWindow.setLayout(null);
 		myContainer = myWindow.getContentPane();
 	}
-	
+
 	/**
 	 * Create the titel page and start button.
 	 */
 	public void createStartPage() {
-		
+
 		myStartPanel = new JPanel();
 		myStartPanel.setBounds(0, 0, 1120, 900);
 		myStartPanel.setBackground(Color.black);
 
 		myStartLabel = new JLabel("TRIVIA  MAZE");
 		myStartLabel.setForeground(Color.white);
-		myStartLabel.setFont(titleFont);
-		
+		myStartLabel.setFont(TITLE_FONT);
+
 		myStartButton = new JButton("START");
-		myStartButton.setFont(biggerFont);
+		myStartButton.setFont(BIGGER_FONT);
 		myStartButton.setForeground(Color.white);
 		myStartButton.setBounds(460, 400, 200, 100);
 		myStartButton.setBackground(null);
@@ -185,7 +185,7 @@ public class GUI implements Serializable {
 				JOptionPane.showMessageDialog(null,
 						"Use keyboard and mouse to play." + "\nAnswer the quetions to open the doors."
 								+ "\nGo from left-top conner to right-bottom conner to win!",
-						"Game Play Instructions", JOptionPane.INFORMATION_MESSAGE);
+								"Game Play Instructions", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		myMenu[2].add(myMenuItem);
@@ -231,7 +231,7 @@ public class GUI implements Serializable {
 	public void save(String theSave) throws IOException {
 
 		try {
-			
+
 			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(theSave));
 			out.writeObject(myGrid);
 			out.writeObject(myMazeMap);
@@ -241,7 +241,7 @@ public class GUI implements Serializable {
 			out.writeObject(myHasChest);
 			out.flush();
 			out.close();
-			
+
 		} catch (IOException e) {
 			System.out.println(e);
 		}
@@ -257,7 +257,7 @@ public class GUI implements Serializable {
 	public void load(String theSave) throws IOException, ClassNotFoundException {
 
 		try {
-			
+
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(theSave));
 			myGrid = (Room[][]) in.readObject();
 			in.readObject();
@@ -265,7 +265,7 @@ public class GUI implements Serializable {
 			myGridHeight = (int) in.readObject();
 			myGridLocation = (Point) in.readObject();
 			myHasChest = (Room) in.readObject();
-			moveToken((int) myGridLocation.getX(), (int) myGridLocation.getY());
+			movePlayer((int) myGridLocation.getX(), (int) myGridLocation.getY());
 			in.close();
 
 			Set<Door> doors = new HashSet<Door>();
@@ -286,11 +286,11 @@ public class GUI implements Serializable {
 				}
 			}
 
-			Iterator<Door> iter = doors.iterator();
+			Iterator<Door> iterator = doors.iterator();
 			Door temp = null;
-			
-			while (iter.hasNext()) {
-				temp = iter.next();
+
+			while (iterator.hasNext()) {
+				temp = iterator.next();
 				if (temp.getAccessLevel() == Model.Door.AccessLevel.LOCKED) {
 					temp.addLock(myMazeMap);
 				} else if (temp.getAccessLevel() == Model.Door.AccessLevel.OPEN) {
@@ -380,7 +380,7 @@ public class GUI implements Serializable {
 		myFieldPanel[1].add(myDoorRight);
 
 		myFieldPanel[1].add(myFieldLabel[1]);
-		
+
 		myDoorUp.setVisible(false);
 		myDoorDown.setVisible(false);
 		myDoorLeft.setVisible(false);
@@ -430,7 +430,7 @@ public class GUI implements Serializable {
 
 		myTextLabel = new JLabel("Enter your answer here");
 		myTextLabel.setForeground(Color.white);
-		myTextLabel.setFont(normalFont);
+		myTextLabel.setFont(NORMAL_FONT);
 
 		myTextPanel.add(myTextLabel);
 		myContainer.add(myTextPanel);
@@ -520,14 +520,13 @@ public class GUI implements Serializable {
 		myMazeMap.setBounds(700, 500, 300, 300);
 		myMazeMap.setBackground(Color.white);
 		myMazeMap.setLayout(null);
-		
+
 		try {
 			generate(myGridWidth, myGridHeight);
 		} catch (SQLException e) {
-			// Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		myWindow.add(myMazeMap);
 	}
 
@@ -536,16 +535,16 @@ public class GUI implements Serializable {
 	 */
 	public void draw() {
 
-		if (!myMazeMap.hasPlayerToken()) {
-			myMazeMap.addPlayerToken(25, 25, 10, 10);
+		if (!myMazeMap.hasPlayer()) {
+			myMazeMap.addPlayer(25, 25, 10, 10);
 		}
-		
+
 		for (int i = 0; i < myGrid.length; i++) {
 			for (int j = 0; j < myGrid[i].length; j++) {
 				myGrid[i][j].draw(myMazeMap);
 			}
 		}
-		
+
 		myMazeMap.repaint();
 	}
 
@@ -558,17 +557,17 @@ public class GUI implements Serializable {
 	 */
 	private void generate(int theM, int theN) throws SQLException {
 
-		myRoomTokenWidth = myMazeMap.getWidth() / 5;
-		myRoomTokenHeight = myMazeMap.getWidth() / 5;
-		myPlayerTokenWidth = myRoomTokenWidth / 5;
-		myDoorDepth = (myRoomTokenWidth + myRoomTokenHeight) / 8;
+		myRoomWidth = myMazeMap.getWidth() / 5;
+		myRoomHeight = myMazeMap.getWidth() / 5;
+		myPlayerWidth = myRoomWidth / 5;
+		myDoorDepth = (myRoomWidth + myRoomHeight) / 8;
 
 		myGrid = new Room[theM][];
 		for (int i = 0; i < theM; i++) {
 			myGrid[i] = new Room[theN];
 			for (int j = 0; j < theN; j++) {
-				myGrid[i][j] = new Room(myRoomTokenWidth * i, myRoomTokenHeight * j, myRoomTokenWidth,
-						myRoomTokenHeight, new Point(i, j));
+				myGrid[i][j] = new Room(myRoomWidth * i, myRoomHeight * j, myRoomWidth,
+						myRoomHeight, new Point(i, j));
 			}
 		}
 
@@ -576,22 +575,22 @@ public class GUI implements Serializable {
 
 		SqliteDB db = new SqliteDB();
 
-		Door tempDoor;
+		Door door;
 		for (int i = 0; i < theM; i++) {
 			for (int j = 0; j < theN; j++) {
 				if (i + 1 < theM) {
-					tempDoor = new Door((myRoomTokenWidth * i) + myRoomTokenWidth - (myDoorDepth / 4),
-							(myRoomTokenHeight * j) + (myRoomTokenHeight / 4), myDoorDepth / 2, myRoomTokenHeight / 2,
+					door = new Door((myRoomWidth * i) + myRoomWidth - (myDoorDepth / 4),
+							(myRoomHeight * j) + (myRoomHeight / 4), myDoorDepth / 2, myRoomHeight / 2,
 							db.getRandomQuestion(myTmm));
-					myGrid[i][j].setDoor(Direction.RIGHT, tempDoor);
-					myGrid[i + 1][j].setDoor(Direction.LEFT, tempDoor);
+					myGrid[i][j].setDoor(Direction.RIGHT, door);
+					myGrid[i + 1][j].setDoor(Direction.LEFT, door);
 				}
 				if (j + 1 < theN) {
-					tempDoor = new Door((myRoomTokenWidth * i) + (myRoomTokenWidth / 4),
-							(myRoomTokenHeight * j) + myRoomTokenHeight - (myDoorDepth / 4), myRoomTokenWidth / 2,
+					door = new Door((myRoomWidth * i) + (myRoomWidth / 4),
+							(myRoomHeight * j) + myRoomHeight - (myDoorDepth / 4), myRoomWidth / 2,
 							myDoorDepth / 2, db.getRandomQuestion(myTmm));
-					myGrid[i][j].setDoor(Direction.DOWN, tempDoor);
-					myGrid[i][j + 1].setDoor(Direction.UP, tempDoor);
+					myGrid[i][j].setDoor(Direction.DOWN, door);
+					myGrid[i][j + 1].setDoor(Direction.UP, door);
 				}
 			}
 		}
@@ -605,12 +604,12 @@ public class GUI implements Serializable {
 	 * @param theM Coordinate x
 	 * @param theN Coordinate y
 	 */
-	public void moveToken(int theM, int theN) {
+	public void movePlayer(int theM, int theN) {
 
 		if (theM <= 4 || theN <= 4) {
 			myGridLocation.setLocation(theM, theN);
-			int x = (myGridLocation.x * myRoomTokenWidth) + (myRoomTokenWidth / 2) - (myPlayerTokenWidth / 2);
-			int y = (myGridLocation.y * myRoomTokenHeight) + (myRoomTokenHeight / 2) - (myPlayerTokenWidth / 2);
+			int x = (myGridLocation.x * myRoomWidth) + (myRoomWidth / 2) - (myPlayerWidth / 2);
+			int y = (myGridLocation.y * myRoomHeight) + (myRoomHeight / 2) - (myPlayerWidth / 2);
 			myMazeMap.movePlayer(x,y);
 			myMazeMap.repaint();
 		}
@@ -626,108 +625,94 @@ public class GUI implements Serializable {
 		myGrid[myGridLocation.x][myGridLocation.y].setOpenOrLock(theDirection, myEnterButton, myMessageText, myMazeMap, this);
 		draw();
 	}
-	
+
 	/**
 	 * Print out the message in question box.
 	 * 
 	 * @param theString Things developer want to put
 	 */
 	public void setMessageText(String theString) {
-		
+
 		myMessageText.setText("");
 		myMessageText.append(theString);
 		myMessageText.paintImmediately(myMessageText.getBounds());
 	}
-	
+
 	/**
 	 * To play the lose sound effect
 	 */
 	public void playLoseSound() {
-		
+
 		myTmm.sound.stop();
 		myTmm.sound.play("LOSE");
 	}
-	
+
 	/**
 	 * Helper method that set start page invisiable.
 	 */
 	public void startGame() {
-		
+
 		if(getMyCurrentRoom().getHasChest() == true) {
 			myChestClosed.setVisible(true);
 		}
-		
+
 		myStartPanel.setVisible(false);
 		myStartButton.setVisible(false);
 	}
 
 	public JTextField getJTF() {
-		
 		return myJTF;
 	}
 
 	public JLabel getTextLabel() {
-		
 		return myTextLabel;
 	}
 
 	public JButton getChestClosed() {
-		
 		return myChestClosed;
 	}
 
 	public JLabel getChestOpened() {
-		
 		return myChestOpened;
 	}
 
 	public boolean getKey() {
-		
 		return myKey;
 	}
 
 	public void setKey(boolean theHasKey) {
-		
 		myKey = theHasKey;
 	}
-	
+
 	public JButton getDoorUp() {
-		
 		return myDoorUp;
 	}
-	
+
 	public JButton getDoorDown() {
-		
 		return myDoorDown;
 	}
-	
+
 	public JButton getDoorLeft() {
-	
-	return myDoorLeft;
+		return myDoorLeft;
 	}
-	
+
 	public JButton getDoorRight() {
-	
-	return myDoorRight;
+		return myDoorRight;
 	}
 
 	public Point getMyGridLocation() {
-		
 		return myGridLocation;
 	}
 
 	public Maze getMyMazeMap() {
-		
 		return myMazeMap;
 	}
 
 	public Room getMyGrid(int theM, int theN) {
-		
 		return myGrid[theM][theN];
 	}
 
 	public Room getMyCurrentRoom() {
-		
 		return myGrid[myGridLocation.x][myGridLocation.y];
 	}
 }
