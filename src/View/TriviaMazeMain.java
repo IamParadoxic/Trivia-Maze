@@ -3,6 +3,7 @@ package View;
 import java.io.*;
 
 import Controller.ActionHandler;
+import Controller.Event;
 import Controller.InputHandler;
 
 public class TriviaMazeMain implements Serializable{
