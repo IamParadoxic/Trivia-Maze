@@ -40,13 +40,11 @@ public class Door implements Serializable{
 	 * @return true if open
 	 */
 	public boolean isOpened() {
-		
 		boolean doorOpened = false;
-		
+
 		if (myAccess.equals(AccessLevel.OPEN)) {
 			doorOpened = true;
 		}
-		
 		return doorOpened;
 	}
 
@@ -56,13 +54,11 @@ public class Door implements Serializable{
 	 * @return true if closed
 	 */
 	public boolean isClosed() {
-		
 		boolean doorClosed = false;
-		
+
 		if (myAccess.equals(AccessLevel.CLOSED)) {
 			doorClosed = true;
 		}
-		
 		return doorClosed;
 	}
 
@@ -72,13 +68,11 @@ public class Door implements Serializable{
 	 * @return true if locked
 	 */
 	public boolean isLocked() {
-		
 		boolean doorLocked = false;
-		
+
 		if (myAccess.equals(AccessLevel.LOCKED)) {
 			doorLocked = true;
 		}
-		
 		return doorLocked;
 	}
 
@@ -88,7 +82,6 @@ public class Door implements Serializable{
 	 * @return the door access level
 	 */
 	public AccessLevel getAccessLevel() {
-		
 		return myAccess;
 	}
 
@@ -98,7 +91,6 @@ public class Door implements Serializable{
 	 * @param theAccessLevel the level you want to set
 	 */
 	public void setAccessLevel(AccessLevel theAccessLevel) {
-		
 		myAccess = theAccessLevel;
 	}
 
@@ -108,7 +100,6 @@ public class Door implements Serializable{
 	 * @param theMazeMap the game map
 	 */
 	public void draw(Maze theMazeMap) {
-		
 		theMazeMap.addDoor(myX, myY, myWidth, myHeight);
 	}
 
@@ -118,7 +109,6 @@ public class Door implements Serializable{
 	 * @param theMazeMap the game map
 	 */
 	public void addOpen(Maze theMazeMap) {
-		
 		theMazeMap.addOpen(myX + 2, myY + 2, myWidth - 4, myHeight - 4);
 	}
 
@@ -128,7 +118,6 @@ public class Door implements Serializable{
 	 * @param theMazeMap the game map
 	 */
 	public void addLock(Maze theMazeMap) {
-		
 		theMazeMap.addLock(myX + 2, myY + 2, myWidth - 4, myHeight - 4);
 	}
 
@@ -141,14 +130,12 @@ public class Door implements Serializable{
 	 * @param theGUI         the game user interface
 	 */
 	public void setOpenOrLock(JButton theInputPanel, JTextArea theMessageText, Maze theMazeMap, GUI theGUI) {
-
 		if (myAccess.equals(AccessLevel.CLOSED)) {
 
 			theInputPanel.addActionListener(new ActionListener() {
-
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					
+
 					if (mySetOAD) {
 						myAccess = AccessLevel.OPEN;
 						theMazeMap.addOpen(myX + 2, myY + 2, myWidth - 4, myHeight - 4);
@@ -156,7 +143,6 @@ public class Door implements Serializable{
 						myAccess = AccessLevel.LOCKED;
 						theMazeMap.addLock(myX + 2, myY + 2, myWidth - 4, myHeight - 4);
 					}
-					
 					if (!theGUI.hasPath()) {
 						JOptionPane.showMessageDialog(null, "YOU LOSE!");
 					}
@@ -173,7 +159,6 @@ public class Door implements Serializable{
 	 * @return the question
 	 */
 	public String getQuestion() {
-		
 		return myQuestion.getQuestion();
 	}
 
@@ -186,17 +171,17 @@ public class Door implements Serializable{
 	 * @param theGUI     the game user interface
 	 */
 	public void answer(String theAnswer, Maze theMazeMap, GUI theGUI) {
-		
+
 		switch (myQuestion.getType()) {
-		
+
 		case MC:
 			MCAnswer(theAnswer, theMazeMap, theGUI);
 			break;
-			
+
 		case SA:
 			SAAnswer(theAnswer, theMazeMap, theGUI);
 			break;
-			
+
 		case TF:
 			TFAnswer(theAnswer, theMazeMap, theGUI);
 			break;
@@ -211,7 +196,7 @@ public class Door implements Serializable{
 	 * @param theGUI     the game user interface
 	 */
 	private void SAAnswer(String theAnswer, Maze theMazeMap, GUI theGUI) {
-		
+
 		if (theAnswer.equalsIgnoreCase(myQuestion.getAnswer(0))) {
 			mySetOAD = true;
 			myAccess = AccessLevel.OPEN;
@@ -221,7 +206,7 @@ public class Door implements Serializable{
 			myAccess = AccessLevel.LOCKED;
 			theMazeMap.addLock(myX + 2, myY + 2, myWidth - 4, myHeight - 4);
 		}
-		
+
 		theMazeMap.repaint();
 	}
 
@@ -246,23 +231,23 @@ public class Door implements Serializable{
 	 * @param theGUI     the game user interface
 	 */
 	private void TFAnswer(String theAnswer, Maze theMazeMap, GUI theGUI) {
-		
+
 		int temp;
-		
+
 		switch (theAnswer) {
-		
+
 		case "True":
 			temp = 0;
 			break;
-			
+
 		case "False":
 			temp = 1;
 			break;
-			
+
 		default:
 			temp = 3;
 		}
-		
+
 		answerHelper(temp, theMazeMap, theGUI);
 	}
 
@@ -276,8 +261,8 @@ public class Door implements Serializable{
 	 * @param theGUI     the game user interface
 	 */
 	private void answerHelper(int theAnswer, Maze theMazeMap, GUI theGUI) {
-		
-		if (myQuestion.attempt(theAnswer)) {
+
+		if (myQuestion.correctAnswer(theAnswer)) {
 			mySetOAD = true;
 			myAccess = AccessLevel.OPEN;
 			theMazeMap.addOpen(myX + 2, myY + 2, myWidth - 4, myHeight - 4);
@@ -286,7 +271,7 @@ public class Door implements Serializable{
 			myAccess = AccessLevel.LOCKED;
 			theMazeMap.addLock(myX + 2, myY + 2, myWidth - 4, myHeight - 4);
 		}
-		
+
 		theMazeMap.repaint();
 	}
 }
