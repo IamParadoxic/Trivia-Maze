@@ -58,7 +58,7 @@ public class Question implements Serializable {
 	 * @param theInput
 	 * @return true if correct
 	 */
-	public boolean attempt(int theInput) {
+	public boolean correctAnswer(int theInput) {
 
 		boolean correctAnswer = false;
 

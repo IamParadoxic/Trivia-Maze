@@ -31,10 +31,6 @@ public class Room implements Serializable {
 		public int getValue() {
 			return myValue;
 		}
-
-		public int getOpposite() {
-			return (myValue + 2) % 4;
-		}
 	}
 
 	public Room(int theX, int theY, int theWidth, int theHeight, Point theGridLocation) {
@@ -54,7 +50,6 @@ public class Room implements Serializable {
 	 * @return corresponding door object
 	 */
 	public Door getDoor(int theIndex) {
-		
 		return myDoors[theIndex];
 	}
 
@@ -65,7 +60,6 @@ public class Room implements Serializable {
 	 * @return corresponding door object
 	 */
 	public Door getDoor(Direction theDirection) {
-		
 		return myDoors[theDirection.getValue()];
 	}
 
@@ -76,7 +70,6 @@ public class Room implements Serializable {
 	 * @param theDoor corresponding door
 	 */
 	public void setDoor(Direction theDirection, Door theDoor) {
-		
 		if (myDoors[theDirection.getValue()] == null)
 			myDoors[theDirection.getValue()] = theDoor;
 	}
@@ -87,7 +80,6 @@ public class Room implements Serializable {
 	 * @return coordinate x
 	 */
 	public int getX() {
-		
 		return myGridLocation.x;
 	}
 
@@ -97,7 +89,6 @@ public class Room implements Serializable {
 	 * @return coordinate y
 	 */
 	public int getY() {
-		
 		return myGridLocation.y;
 	}
 
@@ -108,7 +99,6 @@ public class Room implements Serializable {
 	 * @return true if locked
 	 */
 	public boolean isLocked(Direction theDirection) {
-		
 		return myDoors[theDirection.getValue()].isLocked();
 	}
 
@@ -122,7 +112,6 @@ public class Room implements Serializable {
 	 * @param theGUI the game user interface
 	 */
 	public void setOpenOrLock(Direction theDirection, JButton theInputPanel, JTextArea theMessageText, Maze theMazeMap, GUI theGUI) {
-		
 		myDoors[theDirection.getValue()].setOpenOrLock(theInputPanel, theMessageText, theMazeMap, theGUI);
 	}
 
@@ -136,7 +125,7 @@ public class Room implements Serializable {
 		theMazeMap.addRoom(myX + 5, myY + 5, myWidth - 10, myHeight - 10);
 
 		for (int i = 0; i < 4; i++) {
-			
+
 			if (myDoors[i] != null) {
 				myDoors[i].draw(theMazeMap);
 			}
@@ -147,17 +136,15 @@ public class Room implements Serializable {
 	 * Set if there is unopened chest.
 	 */
 	public void setHasChest(boolean TF) {
-		
 		myHasChest = TF;
 	}
-	
+
 	/**
 	 * Get the chest status.
 	 * 
 	 * @return if there is unopened chest
 	 */
 	public boolean getHasChest() {
-		
 		return myHasChest;
 	}
 }
