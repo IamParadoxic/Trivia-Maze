@@ -11,7 +11,7 @@ import View.TriviaMazeMain;
 public class Event implements Serializable {
 
 	private static final long serialVersionUID = 2559151663429771478L;
-	
+
 	private TriviaMazeMain myTmm;
 	private transient Scanner myScan;
 	private boolean myUseKey = false;
@@ -21,7 +21,7 @@ public class Event implements Serializable {
 	public Event(TriviaMazeMain theTmm) {
 		this.myTmm = theTmm;
 	}
-	
+
 	/**
 	 * Start the game;
 	 */
@@ -35,7 +35,7 @@ public class Event implements Serializable {
 	 * Open chest action.
 	 */
 	public void openChest() {
-		
+
 		myTmm.sound.play("CHEST");
 		myTmm.gui.getChestClosed().setVisible(false);
 		myTmm.gui.setKey(true);
@@ -62,18 +62,18 @@ public class Event implements Serializable {
 
 		// to see if the door is already been opened
 		else if (myTmm.gui.getMyCurrentRoom().getDoor(Direction.UP).getAccessLevel() == AccessLevel.OPEN) {
-			
+
 			myTmm.gui.setMessageText("This door is opened.");
-			
+
 			if (myTmm.gui.getMyCurrentRoom().getDoor(0) != null) {
-				
+
 				if (myTmm.gui.getMyCurrentRoom().getDoor(0).isOpened()) {
 					myTmm.sound.play("DOOR");
-					myTmm.gui.moveToken(myTmm.gui.getMyGridLocation().x, myTmm.gui.getMyGridLocation().y - 1);
+					myTmm.gui.movePlayer(myTmm.gui.getMyGridLocation().x, myTmm.gui.getMyGridLocation().y - 1);
 					myTmm.gui.getMyMazeMap().repaint();
 					doorCheck();
 				}
-				
+
 				if (myTmm.gui.getMyCurrentRoom().getHasChest()) {
 					myTmm.gui.getChestClosed().setVisible(true);
 				} else {
@@ -109,10 +109,10 @@ public class Event implements Serializable {
 
 		// to see if the door is out of attempt
 		if (myTmm.gui.getMyCurrentRoom().getDoor(Direction.DOWN).getAccessLevel() == AccessLevel.LOCKED) {
-			
+
 			myTmm.sound.play("LOCK");
 			myTmm.gui.setMessageText("Wrong answer, door permanently locked.");
-			
+
 			if (!myTmm.gui.hasPath()) {
 				myTmm.gui.playLoseSound();
 				JOptionPane.showMessageDialog(null, "YOU LOSE!");
@@ -123,18 +123,18 @@ public class Event implements Serializable {
 
 		// to see if the door is already been opened
 		else if (myTmm.gui.getMyCurrentRoom().getDoor(Direction.DOWN).getAccessLevel() == AccessLevel.OPEN) {
-			
+
 			myTmm.gui.setMessageText("This door is opened.");
-			
+
 			if (myTmm.gui.getMyCurrentRoom().getDoor(2) != null) {
-				
+
 				if (myTmm.gui.getMyCurrentRoom().getDoor(2).isOpened()) {
 					myTmm.sound.play("DOOR");
-					myTmm.gui.moveToken(myTmm.gui.getMyGridLocation().x, myTmm.gui.getMyGridLocation().y + 1);
+					myTmm.gui.movePlayer(myTmm.gui.getMyGridLocation().x, myTmm.gui.getMyGridLocation().y + 1);
 					myTmm.gui.getMyMazeMap().repaint();
 					doorCheck();
 				}
-				
+
 				if (myTmm.gui.getMyCurrentRoom().getHasChest()) {
 					myTmm.gui.getChestClosed().setVisible(true);
 				} else {
@@ -170,10 +170,10 @@ public class Event implements Serializable {
 
 		// to see if the door is out of attempt
 		if (myTmm.gui.getMyCurrentRoom().getDoor(Direction.LEFT).getAccessLevel() == AccessLevel.LOCKED) {
-			
+
 			myTmm.sound.play("LOCK");
 			myTmm.gui.setMessageText("Wrong answer, door permanently locked.");
-			
+
 			if (!myTmm.gui.hasPath()) {
 				myTmm.gui.playLoseSound();
 				JOptionPane.showMessageDialog(null, "YOU LOSE!");
@@ -183,18 +183,18 @@ public class Event implements Serializable {
 
 		// to see if the door is already been opened
 		else if (myTmm.gui.getMyCurrentRoom().getDoor(Direction.LEFT).getAccessLevel() == AccessLevel.OPEN) {
-			
+
 			myTmm.gui.setMessageText("This door is opened.");
-			
+
 			if (myTmm.gui.getMyCurrentRoom().getDoor(3) != null) {
-				
+
 				if (myTmm.gui.getMyCurrentRoom().getDoor(3).isOpened()) {
 					myTmm.sound.play("DOOR");
-					myTmm.gui.moveToken(myTmm.gui.getMyGridLocation().x - 1, myTmm.gui.getMyGridLocation().y);
+					myTmm.gui.movePlayer(myTmm.gui.getMyGridLocation().x - 1, myTmm.gui.getMyGridLocation().y);
 					myTmm.gui.getMyMazeMap().repaint();
 					doorCheck();
 				}
-				
+
 				if (myTmm.gui.getMyCurrentRoom().getHasChest()) {
 					myTmm.gui.getChestClosed().setVisible(true);
 				} else {
@@ -230,10 +230,10 @@ public class Event implements Serializable {
 
 		// to see if the door is out of attempt
 		if (myTmm.gui.getMyCurrentRoom().getDoor(Direction.RIGHT).getAccessLevel() == AccessLevel.LOCKED) {
-			
+
 			myTmm.sound.play("LOCK");
 			myTmm.gui.setMessageText("Wrong answer, door permanently locked.");
-			
+
 			if (!myTmm.gui.hasPath()) {
 				myTmm.gui.playLoseSound();
 				JOptionPane.showMessageDialog(null, "YOU LOSE!");
@@ -243,18 +243,18 @@ public class Event implements Serializable {
 
 		// to see if the door is already been opened
 		else if (myTmm.gui.getMyCurrentRoom().getDoor(Direction.RIGHT).getAccessLevel() == AccessLevel.OPEN) {
-			
+
 			myTmm.gui.setMessageText("This door is opened.");
-			
+
 			if (myTmm.gui.getMyCurrentRoom().getDoor(1) != null) {
-				
+
 				if (myTmm.gui.getMyCurrentRoom().getDoor(1).isOpened()) {
 					myTmm.sound.play("DOOR");
-					myTmm.gui.moveToken(myTmm.gui.getMyGridLocation().x + 1, myTmm.gui.getMyGridLocation().y);
+					myTmm.gui.movePlayer(myTmm.gui.getMyGridLocation().x + 1, myTmm.gui.getMyGridLocation().y);
 					myTmm.gui.getMyMazeMap().repaint();
 					doorCheck();
 				}
-				
+
 				if (myTmm.gui.getMyCurrentRoom().getHasChest()) {
 					myTmm.gui.getChestClosed().setVisible(true);
 				} else {
@@ -317,21 +317,21 @@ public class Event implements Serializable {
 				ansQuestion();
 			}
 		}
-		
+
 		// chose the direction
 		switch (myActDirection) {
 
 		case UP: goUp();
-			break;
-			
+		break;
+
 		case DOWN: goDown();
-			break;
-			
+		break;
+
 		case LEFT: goLeft();
-			break;
-			
+		break;
+
 		case RIGHT: goRight();
-			break;
+		break;
 		}
 
 		// checks for if you've won, since if you've correctly answered a question,
@@ -353,31 +353,31 @@ public class Event implements Serializable {
 		// runs the answer method in the door class, which will check if the inputed answer is correct
 		myTmm.gui.getMyCurrentRoom().getDoor(myActDirection).answer(myTmm.gui.getJTF().getText(), myTmm.gui.getMyMazeMap(), myTmm.gui);
 		mySkipKey = false;
-		
+
 	}
-	
+
 	/**
 	 * Helper method for check if there is door at that direction. if not, set it invisible.
 	 */
 	private void doorCheck() {
-		
+
 		myTmm.gui.getDoorUp().setVisible(true);
 		myTmm.gui.getDoorDown().setVisible(true);
 		myTmm.gui.getDoorLeft().setVisible(true);
 		myTmm.gui.getDoorRight().setVisible(true);
-		
+
 		if (myTmm.gui.getMyCurrentRoom().getDoor(Direction.UP) == null) {
 			myTmm.gui.getDoorUp().setVisible(false);
 		}
-		
+
 		if (myTmm.gui.getMyCurrentRoom().getDoor(Direction.DOWN) == null) {
 			myTmm.gui.getDoorDown().setVisible(false);
 		}
-		
+
 		if (myTmm.gui.getMyCurrentRoom().getDoor(Direction.LEFT) == null) {
 			myTmm.gui.getDoorLeft().setVisible(false);
 		}
-		
+
 		if (myTmm.gui.getMyCurrentRoom().getDoor(Direction.RIGHT) == null) {
 			myTmm.gui.getDoorRight().setVisible(false);
 		}
