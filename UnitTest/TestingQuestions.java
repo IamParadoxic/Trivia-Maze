@@ -6,7 +6,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import Controller.SqliteDB;
+import Model.SqliteDB;
 import Model.Question;
 import Model.Question.QuestionType;
 import View.TriviaMazeMain;
