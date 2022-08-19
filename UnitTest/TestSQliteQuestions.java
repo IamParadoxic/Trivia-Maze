@@ -6,8 +6,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import Model.SqliteDB;
 import Model.Question;
+import Model.SqliteDB;
 import Model.Question.QuestionType;
 import View.TriviaMazeMain;
 
@@ -28,14 +28,14 @@ class TestingQuestions {
 
 	
 	@Test
-	void questionTest1() {
+	void shortAnswertTest1
 		Question temp = db.getFromID(2, myTmm);
 		assertTrue(temp.correctAnswer(0));
 		assertEquals(QuestionType.SA, temp.getType());
 	}
 	
 	@Test
-	void questionTest2() {
+	void trueFalseTest1
 		Question temp = db.getFromID(28, myTmm);
 		Question temp2 = db.getFromID(1, myTmm);
 		assertTrue(temp.correctAnswer(1));
@@ -44,20 +44,20 @@ class TestingQuestions {
 	}
 	
 	@Test
-	void questionTest3() {
+	void shortAnswerTest2
 		Question temp = db.getFromID(2, myTmm);
 		assertEquals("Brown", temp.getAnswer(0));
 	}
 	
 	@Test
-	void questionTest4() {
+	void trueFalseTest2 {
 		Question temp = db.getFromID(1, myTmm);
 		assertEquals("True", temp.getAnswer(0));
 		assertEquals("False", temp.getAnswer(1));
 	}
 	
 	@Test
-	void questionTest5() {
+	void multipleChoiceTest
 		Question temp = db.getFromID(3, myTmm);
 		ArrayList<String> answers = new ArrayList<>();
 		for(int i = 0; i <= 3; i++) {
@@ -73,5 +73,16 @@ class TestingQuestions {
 		assertTrue(temp.correctAnswer(answers.indexOf("Pandora")));
 	}
 	
+	@Test
+	void outOFBoundsIdTest1 {
+		Question temp = db.getFromID(0, myTmm);
+		assertNull(temp);
+	}
+	
+	@Test
+	void outOFBoundsIdTest2) {
+		Question temp = db.getFromID(420, myTmm);
+		assertNull(temp);
+	}
 
 }
