@@ -78,6 +78,7 @@ public class Door implements Serializable{
 
 	/**
 	 * Get the access level status.
+	 * @param theAccessLevel 
 	 * 
 	 * @return the door access level
 	 */
@@ -149,6 +150,24 @@ public class Door implements Serializable{
 				}
 			});
 		}
+	}
+	
+	/**
+	 * Get the status of mySetOAD
+	 * @return mySetOAD
+	 */
+
+	public boolean isMySetOAD() {
+		return mySetOAD;
+	}
+	
+	/**
+	 * set mySetOAD
+	 * @param theSetOAD identify setting door open or locked
+	 */
+
+	public void setMySetOAD(boolean theSetOAD) {
+		this.mySetOAD = theSetOAD;
 	}
 
 	/**
